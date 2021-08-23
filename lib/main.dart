@@ -1,63 +1,55 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/constants/theme.dart';
+import 'package:todo/pages/home.dart';
+import 'package:todo/pages/setting.dart';
+import 'package:todo/providers/project_provider.dart';
+import 'package:todo/providers/theme_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todo Br',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => ProjectProvider()),
+      ],
+      child: Builder(
+        builder: (context) {
+          final themeProvider = Provider.of<ThemeProvider>(
+            context,
+            listen: true,
+          );
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+          return MaterialApp(
+            title: 'Todo Br',
+            debugShowCheckedModeBanner: false,
+            themeMode: themeProvider.currentTheme == ActiveTheme.DARK_THEME
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            theme: kThemeLight,
+            darkTheme: kThemeDark,
+            color: Color(0xFF171717),
+            scrollBehavior: ScrollBehavior().copyWith(
+              physics: BouncingScrollPhysics(),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+            routes: {
+              '/': (context) => HomePage(),
+              '/setting': (context) => SettingPage(),
+            },
+            builder: (context, route) {
+              return route!;
+            },
+          );
+        },
       ),
     );
   }
