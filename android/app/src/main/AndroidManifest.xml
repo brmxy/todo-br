@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bram.todo.todo">
+    package="com.bram.todo">
    <application
-        android:label="todo"
+        android:label="Todo Br"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

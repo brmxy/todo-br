@@ -1,4 +1,4 @@
-package com.bram.todo.todo
+package com.bram.todo
 
 import io.flutter.embedding.android.FlutterActivity
 

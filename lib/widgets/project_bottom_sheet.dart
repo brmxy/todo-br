@@ -1,17 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/models/project.dart';
 import 'package:todo/providers/project_provider.dart';
+import 'package:todo/widgets/custom_floating_icon_button.dart';
 
-class NewProjectBottomSheet extends StatefulWidget {
-  NewProjectBottomSheet({Key? key, this.formKey}) : super(key: key);
+enum ProjectBtnOption {
+  ADD,
+  UPDATE,
+}
+
+class ProjectBottomSheet extends StatefulWidget {
+  ProjectBottomSheet({
+    Key? key,
+    this.formKey,
+    required this.option,
+    this.projectId,
+  }) : super(key: key);
 
   final Key? formKey;
+  final ProjectBtnOption option;
+  final int? projectId;
 
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show(
+    BuildContext context,
+    ProjectBtnOption option, {
+    int? projectId = 0,
+  }) async {
     final _formKey = GlobalKey<FormState>();
 
     showModalBottomSheet(
@@ -20,7 +37,11 @@ class NewProjectBottomSheet extends StatefulWidget {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).cardColor,
       useRootNavigator: true,
-      builder: (context) => NewProjectBottomSheet(formKey: _formKey),
+      builder: (context) => ProjectBottomSheet(
+        formKey: _formKey,
+        option: option,
+        projectId: projectId!,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -30,12 +51,27 @@ class NewProjectBottomSheet extends StatefulWidget {
   }
 
   @override
-  _NewProjectBottomSheetState createState() => _NewProjectBottomSheetState();
+  _ProjectBottomSheetState createState() => _ProjectBottomSheetState();
 }
 
-class _NewProjectBottomSheetState extends State<NewProjectBottomSheet> {
+class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.option == ProjectBtnOption.UPDATE) {
+      final projectProvider = Provider.of<ProjectProvider>(
+        context,
+        listen: false,
+      );
+      var project = projectProvider.findProject(widget.projectId!);
+      _titleController.text = project.title;
+      _descController.text = project.description;
+    }
+  }
 
   @override
   void dispose() {
@@ -50,7 +86,7 @@ class _NewProjectBottomSheetState extends State<NewProjectBottomSheet> {
 
     return AnimatedPadding(
       padding: MediaQuery.of(context).viewInsets,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       child: Stack(
         children: [
           Container(
@@ -76,13 +112,23 @@ class _NewProjectBottomSheetState extends State<NewProjectBottomSheet> {
                           autofocus: true,
                           controller: _titleController,
                           textInputAction: TextInputAction.next,
+                          textCapitalization: TextCapitalization.words,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(fontWeight: FontWeight.w400),
                           decoration: InputDecoration(
-                            hintText: 'Title',
+                            hintText: 'Project Name',
                           ),
                         ),
+                        SizedBox(height: 20.0),
                         TextFormField(
                           controller: _descController,
                           keyboardType: TextInputType.multiline,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(fontWeight: FontWeight.w400),
                           decoration: InputDecoration(
                             hintMaxLines: 100,
                             hintText: 'Description',
@@ -98,37 +144,28 @@ class _NewProjectBottomSheetState extends State<NewProjectBottomSheet> {
               ],
             ),
           ),
-          Positioned(
-            right: 20,
-            bottom: 20,
-            child: FloatingActionButton(
-              tooltip: 'New Project',
-              child: IconTheme(
-                data: Theme.of(context).iconTheme.copyWith(
-                      size: 26.0,
-                      color: Theme.of(context).textTheme.bodyText2!.color,
-                    ),
-                child: Icon(FeatherIcons.check),
-              ),
-              backgroundColor: Theme.of(context).buttonColor,
-              onPressed: () {
-                final projectProvider = context.read<ProjectProvider>();
-                final ttlValue = _titleController.text;
-                final descValue = _descController.text;
+          CustomFloatingIconButton(
+            icon: FeatherIcons.check,
+            tooltip: 'Submit',
+            onPressed: () {
+              final projectProvider = context.read<ProjectProvider>();
+              final ttlValue = _titleController.text;
+              final descValue = _descController.text;
 
-                if (ttlValue.isNotEmpty || descValue.isNotEmpty) {
-                  final project = Project(
-                    title: ttlValue,
-                    description: descValue,
-                  );
+              if (ttlValue.isNotEmpty || descValue.isNotEmpty) {
+                var project = Project(
+                  id: projectProvider.projects.length + 1,
+                  title: ttlValue,
+                  description: descValue,
+                );
 
-                  print(project);
+                if (widget.option == ProjectBtnOption.ADD) {
                   projectProvider.addNewProject(project);
-                  Navigator.pop(context);
                 }
-              },
-            ),
-          ),
+                Navigator.pop(context);
+              }
+            },
+          )
         ],
       ),
     );

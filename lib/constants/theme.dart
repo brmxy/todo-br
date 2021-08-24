@@ -52,7 +52,7 @@ final kThemeDark = ThemeData(
   scaffoldBackgroundColor: Color(0xFF171717),
   iconTheme: IconThemeData(
     color: Color(0xFF939393),
-    size: 16.0,
+    size: 14.0,
   ),
   bottomSheetTheme: BottomSheetThemeData(
     backgroundColor: Color(0xFF222222),
@@ -60,6 +60,25 @@ final kThemeDark = ThemeData(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(20.0),
       ),
+    ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    contentPadding: const EdgeInsets.all(10.0),
+    border: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xFF939393),
+      ),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xFFEDEDED),
+        width: 1.0,
+      ),
+    ),
+    hintStyle: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: Color(0xFF939393),
     ),
   ),
 );
@@ -78,43 +97,44 @@ final kThemeLight = ThemeData(
   fontFamily: 'Inter',
   textTheme: TextTheme(
     headline1: TextStyle(
-      fontSize: 18,
+      fontSize: 24,
       fontWeight: FontWeight.w600,
       color: Color(0xFF171717),
     ),
     headline2: TextStyle(
-      fontSize: 16,
+      fontSize: 18,
       fontWeight: FontWeight.w500,
       color: Color(0xFF171717),
     ),
     subtitle1: TextStyle(
-      fontSize: 12,
+      fontSize: 16,
       fontWeight: FontWeight.w500,
       color: Color(0xFF171717),
     ),
     bodyText1: TextStyle(
-      fontSize: 12.0,
+      fontSize: 14,
       fontWeight: FontWeight.w400,
       color: Color(0xFF171717),
     ),
     bodyText2: TextStyle(
-      fontSize: 8.0,
+      fontSize: 12,
       fontWeight: FontWeight.w400,
       color: Color(0xFF171717),
     ),
   ),
-  brightness: Brightness.dark,
+  brightness: Brightness.light,
   primaryColor: Color(0xFFF5F5F5),
   backgroundColor: Color(0xFFF5F5F5),
-  splashColor: Color(0xFF939393),
+  splashColor: Color(0xFFEDEDED),
+  hoverColor: Colors.transparent,
   canvasColor: Color(0xFFF5F5F5),
   cardColor: Color(0xFFEDEDED),
-  buttonColor: Color(0xFF444444),
-  dividerColor: Color(0xFF444444),
+  buttonColor: Color(0xFF939393),
+  dividerColor: Color(0xFF6F6F6F),
   scaffoldBackgroundColor: Color(0xFFF5F5F5),
   iconTheme: IconThemeData(
-    color: Color(0xFF444444),
-    size: 16.0,
+    color: Color(0xFF6F6F6F),
+    size: 14.0,
   ),
   bottomSheetTheme: BottomSheetThemeData(
     backgroundColor: Color(0xFFEDEDED),
