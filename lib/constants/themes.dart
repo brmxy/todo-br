@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final kThemeDark = ThemeData(
@@ -15,27 +14,27 @@ final kThemeDark = ThemeData(
   fontFamily: 'Inter',
   textTheme: TextTheme(
     headline1: TextStyle(
-      fontSize: 24,
+      fontSize: 24.0,
       fontWeight: FontWeight.w600,
       color: Color(0xFFEDEDED),
     ),
     headline2: TextStyle(
-      fontSize: 18,
+      fontSize: 18.0,
       fontWeight: FontWeight.w500,
       color: Color(0xFFEDEDED),
     ),
     subtitle1: TextStyle(
-      fontSize: 16,
+      fontSize: 16.0,
       fontWeight: FontWeight.w500,
       color: Color(0xFFEDEDED),
     ),
     bodyText1: TextStyle(
-      fontSize: 14,
+      fontSize: 14.0,
       fontWeight: FontWeight.w400,
       color: Color(0xFFEDEDED),
     ),
     bodyText2: TextStyle(
-      fontSize: 12,
+      fontSize: 12.0,
       fontWeight: FontWeight.w400,
       color: Color(0xFFEDEDED),
     ),
@@ -76,7 +75,7 @@ final kThemeDark = ThemeData(
       ),
     ),
     hintStyle: TextStyle(
-      fontSize: 16,
+      fontSize: 16.0,
       fontWeight: FontWeight.w400,
       color: Color(0xFF939393),
     ),
@@ -97,27 +96,27 @@ final kThemeLight = ThemeData(
   fontFamily: 'Inter',
   textTheme: TextTheme(
     headline1: TextStyle(
-      fontSize: 24,
+      fontSize: 24.0,
       fontWeight: FontWeight.w600,
       color: Color(0xFF171717),
     ),
     headline2: TextStyle(
-      fontSize: 18,
+      fontSize: 18.0,
       fontWeight: FontWeight.w500,
       color: Color(0xFF171717),
     ),
     subtitle1: TextStyle(
-      fontSize: 16,
+      fontSize: 16.0,
       fontWeight: FontWeight.w500,
       color: Color(0xFF171717),
     ),
     bodyText1: TextStyle(
-      fontSize: 14,
+      fontSize: 14.0,
       fontWeight: FontWeight.w400,
       color: Color(0xFF171717),
     ),
     bodyText2: TextStyle(
-      fontSize: 12,
+      fontSize: 12.0,
       fontWeight: FontWeight.w400,
       color: Color(0xFF171717),
     ),
@@ -142,6 +141,25 @@ final kThemeLight = ThemeData(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(20.0),
       ),
+    ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    contentPadding: const EdgeInsets.all(10.0),
+    border: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xFF6F6F6F),
+      ),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0xFF939393),
+        width: 1.0,
+      ),
+    ),
+    hintStyle: TextStyle(
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+      color: Color(0xFF6F6F6F),
     ),
   ),
 );

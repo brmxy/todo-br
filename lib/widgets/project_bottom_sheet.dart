@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:todo/models/project.dart';
-import 'package:todo/providers/project_provider.dart';
-import 'package:todo/widgets/custom_floating_icon_button.dart';
+import 'package:todo/index.dart';
+import 'package:todo/models/index.dart';
+import 'package:todo/providers/index.dart';
+import 'package:todo/widgets/index.dart';
 
 enum ProjectBtnOption {
   ADD,
@@ -144,7 +142,7 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
               ],
             ),
           ),
-          CustomFloatingIconButton(
+          FloatingActionIconButton(
             icon: FeatherIcons.check,
             tooltip: 'Submit',
             onPressed: () {

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo/index.dart';
 
 enum ActiveTheme {
   DARK_THEME,
@@ -14,20 +12,23 @@ class ThemeProvider extends ChangeNotifier {
   ActiveTheme _currentTheme = ActiveTheme.DARK_THEME;
   ActiveTheme get currentTheme => _currentTheme;
 
-  late String _parsedThemeEnum;
+  var _parsedThemeEnum;
 
-  /// This method is not stable. Please don't use this method.
-  // ignore: unused_element
-  void _setInitialTheme() async {
+  void setInitialTheme() async {
     await prefs.then((value) {
-      final theme = value.getString('THEME');
+      if (value.containsKey('THEME')) {
+        final theme = value.getString('THEME');
 
-      if (theme!.isEmpty) {
-        _currentTheme = ActiveTheme.DARK_THEME;
-      } else if (theme == 'DARK_THEME') {
-        _currentTheme = ActiveTheme.DARK_THEME;
-      } else if (theme == 'LIGHT_THEME') {
-        _currentTheme = ActiveTheme.LIGHT_THEME;
+        if (theme!.isEmpty) {
+          _currentTheme = ActiveTheme.DARK_THEME;
+        } else if (theme == 'DARK_THEME') {
+          _currentTheme = ActiveTheme.DARK_THEME;
+        } else if (theme == 'LIGHT_THEME') {
+          _currentTheme = ActiveTheme.LIGHT_THEME;
+        }
+      } else {
+        _parsedThemeEnum = ActiveTheme.DARK_THEME.toString().split('.').last;
+        value.setString('THEME', _parsedThemeEnum);
       }
     });
   }

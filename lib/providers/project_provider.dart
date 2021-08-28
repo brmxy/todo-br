@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo/models/project.dart';
+import 'package:todo/index.dart';
+import 'package:todo/models/index.dart';
 
 class ProjectProvider extends ChangeNotifier {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();

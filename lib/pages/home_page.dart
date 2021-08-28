@@ -1,17 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:provider/provider.dart';
-import 'package:todo/constants/colors.dart';
-import 'package:todo/models/project.dart';
-import 'package:todo/providers/project_provider.dart';
-import 'package:todo/widgets/app_drawer.dart';
-import 'package:todo/widgets/custom_app_bar.dart';
-import 'package:todo/widgets/custom_floating_icon_button.dart';
-import 'package:todo/widgets/project_bottom_sheet.dart';
-import 'package:todo/widgets/task_list_item.dart';
+import 'package:todo/constants/index.dart';
+import 'package:todo/index.dart';
+import 'package:todo/models/index.dart';
+import 'package:todo/pages/index.dart';
+import 'package:todo/providers/index.dart';
+import 'package:todo/widgets/index.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -46,7 +41,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        drawer: AppDrawer(),
+        drawer: CustomAppDrawer(),
         body: buildBody(context),
       ),
     );
@@ -81,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 )
               : buildProjectMasonry(context),
         ),
-        CustomFloatingIconButton(
+        FloatingActionIconButton(
           tooltip: 'Add New Project',
           icon: FeatherIcons.plus,
           onPressed: () async {
@@ -110,39 +105,46 @@ class _HomePageState extends State<HomePage> {
         final project = projectProvider.projects[index];
         final tasks = project.tasks;
 
-        return Card(
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        color: kColors[project.id % kColors.length],
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProjectPage(project: project),
+              ),
+            );
+          },
+          child: Card(
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          color: kColors[project.id % kColors.length],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        project.title,
-                        style: Theme.of(context).textTheme.subtitle1,
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          project.title,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                tasks.isNotEmpty
-                    ? buildTaskListItem(project)
-                    : TaskListItem(
-                        text: 'There is no task in this project',
-                        onTap: () {},
-                      ),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  tasks.isNotEmpty
+                      ? buildTaskListItem(project)
+                      : TaskListItem(text: 'There is no task in this project'),
+                ],
+              ),
             ),
           ),
         );
@@ -156,10 +158,7 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, index) {
         final task = project.tasks[index];
 
-        return TaskListItem(
-          task: task,
-          onTap: () {},
-        );
+        return TaskListItem(task: task);
       },
     );
   }

@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomFloatingIconButton extends StatelessWidget {
-  CustomFloatingIconButton({
+class FloatingActionIconButton extends StatelessWidget {
+  FloatingActionIconButton({
     Key? key,
     this.tooltip,
     required this.icon,
