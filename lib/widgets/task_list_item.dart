@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:todo/models/task.dart';
+import 'package:todo/index.dart';
 
 class TaskListItem extends StatelessWidget {
   TaskListItem({
     Key? key,
     this.task,
-    this.text,
+    this.text = '',
   }) : super(key: key);
 
   final Task? task;
@@ -15,6 +14,7 @@ class TaskListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Row(
         children: [
           Icon(
@@ -28,7 +28,7 @@ class TaskListItem extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-              text!.isNotEmpty ? text! : task!.name,
+              text!.isNotEmpty ? text! : task!.task,
               overflow:
                   text!.isNotEmpty ? TextOverflow.clip : TextOverflow.ellipsis,
               style: Theme.of(context)

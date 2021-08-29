@@ -1,12 +1,6 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:todo/constants/index.dart';
 import 'package:todo/index.dart';
-import 'package:todo/models/index.dart';
-import 'package:todo/pages/index.dart';
-import 'package:todo/providers/index.dart';
-import 'package:todo/widgets/index.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -94,6 +88,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     return StaggeredGridView.countBuilder(
+      shrinkWrap: true,
       crossAxisCount: 2,
       mainAxisSpacing: 6.0,
       crossAxisSpacing: 6.0,
@@ -105,55 +100,68 @@ class _HomePageState extends State<HomePage> {
         final project = projectProvider.projects[index];
         final tasks = project.tasks;
 
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProjectPage(project: project),
-              ),
-            );
-          },
-          child: Card(
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Container(
-                          width: 10,
-                          height: 10,
-                          color: kColors[project.id % kColors.length],
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          project.title,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  tasks.isNotEmpty
-                      ? buildTaskListItem(project)
-                      : TaskListItem(text: 'There is no task in this project'),
-                ],
-              ),
-            ),
-          ),
-        );
+        return buildProjectCard(project, context, tasks);
       },
     );
   }
 
-  Widget buildTaskListItem(Project project) {
+  Widget buildProjectCard(
+    Project project,
+    BuildContext context,
+    List<Task> tasks,
+  ) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProjectPage(project: project),
+          ),
+        );
+      },
+      child: Card(
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: Container(
+                      width: 10.0,
+                      height: 10.0,
+                      color: kColors[project.id % kColors.length],
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Text(
+                      project.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.0),
+              tasks.isNotEmpty
+                  ? buildTaskListItem(context, project)
+                  : TaskListItem(text: 'There is no task in this project'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTaskListItem(BuildContext context, Project project) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: project.tasks.length,
       itemBuilder: (context, index) {
         final task = project.tasks[index];

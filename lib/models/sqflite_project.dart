@@ -1,7 +1,7 @@
 import 'package:todo/models/index.dart';
 
-class Project {
-  Project({
+class SQLProject {
+  SQLProject({
     required this.id,
     required this.title,
     this.description = '',
@@ -15,15 +15,16 @@ class Project {
   final bool isMarked;
   final List<Task> tasks;
 
-  factory Project.fromRawJson(String str) => Project.fromJson(json.decode(str));
+  factory SQLProject.fromRawJson(String str) =>
+      SQLProject.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Project.fromJson(Map<String, dynamic> json) => Project(
+  factory SQLProject.fromJson(Map<String, dynamic> json) => SQLProject(
         id: json["id"],
         title: json["title"],
         description: json["description"],
-        isMarked: json["isMarked"],
+        isMarked: json["isMarked"] == 1 ? true : false,
         tasks: List<Task>.from(json["tasks"].map((x) => x)),
       );
 
@@ -31,7 +32,7 @@ class Project {
         "id": id,
         "title": title,
         "description": description,
-        "isMarked": isMarked,
+        "isMarked": isMarked ? 1 : 0,
         "tasks": List<Task>.from(tasks.map((x) => x)),
       };
 }

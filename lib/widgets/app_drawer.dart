@@ -1,9 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:todo/constants/index.dart';
 import 'package:todo/index.dart';
-import 'package:todo/pages/index.dart';
-import 'package:todo/providers/index.dart';
-import 'package:todo/widgets/index.dart';
 
 class CustomAppDrawer extends StatelessWidget {
   @override
@@ -19,13 +16,25 @@ class CustomAppDrawer extends StatelessWidget {
             Container(
               width: mediaWidth,
               margin: const EdgeInsets.only(bottom: 20.0),
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 15.0,
+                horizontal: 20.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Menu'),
+                  Text(
+                    'Menu',
+                    style: Theme.of(context).textTheme.headline2!.copyWith(
+                          color: Theme.of(context).dividerColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
                   InkWell(
-                    child: Icon(FeatherIcons.x),
+                    child: Icon(
+                      FeatherIcons.x,
+                      size: 24.0,
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                     },
@@ -46,11 +55,10 @@ class CustomAppDrawer extends StatelessWidget {
               menuText: 'All Projects',
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/');
               },
             ),
             DrawerItem(
-              icon: FeatherIcons.bookmark,
+              icon: CupertinoIcons.bookmark_fill,
               menuText: 'Marked',
               onTap: () {},
             ),
@@ -63,6 +71,7 @@ class CustomAppDrawer extends StatelessWidget {
                 Navigator.pushNamed(context, '/setting');
               },
             ),
+            SizedBox(height: 20.0),
           ],
         ),
       ),
@@ -85,6 +94,7 @@ class CustomAppDrawer extends StatelessWidget {
 
           return InkWell(
             onTap: () {
+              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -95,7 +105,7 @@ class CustomAppDrawer extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(
                 top: 10.0,
-                left: 40.0,
+                left: 57.0,
                 bottom: 10.0,
                 right: 20.0,
               ),
@@ -103,21 +113,30 @@ class CustomAppDrawer extends StatelessWidget {
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(50.0),
                     child: Container(
                       width: 8.0,
                       height: 8.0,
                       color: kColors[project.id % kColors.length],
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 10.0),
                   Expanded(
                     child: Text(
                       project.title,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).dividerColor),
                     ),
                   ),
-                  Text(tasks.length.toString()),
+                  Text(
+                    tasks.length.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Theme.of(context).dividerColor),
+                  ),
                 ],
               ),
             ),

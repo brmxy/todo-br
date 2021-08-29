@@ -1,5 +1,4 @@
 import 'package:todo/index.dart';
-import 'package:todo/providers/index.dart';
 
 class CustomCircularProgressIndicator extends StatelessWidget {
   @override

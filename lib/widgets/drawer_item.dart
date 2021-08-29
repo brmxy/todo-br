@@ -27,11 +27,16 @@ class DrawerItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(icon),
-              SizedBox(width: 10.0),
+              Icon(
+                icon,
+                size: 16.0,
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                textDirection: TextDirection.ltr,
+              ),
+              SizedBox(width: 20.0),
               Text(
                 menuText,
-                style: TextStyle(fontSize: 14.0),
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ],
           ),

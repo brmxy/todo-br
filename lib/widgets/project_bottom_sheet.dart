@@ -1,9 +1,5 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:todo/index.dart';
-import 'package:todo/models/index.dart';
-import 'package:todo/providers/index.dart';
-import 'package:todo/widgets/index.dart';
 
 enum ProjectBtnOption {
   ADD,

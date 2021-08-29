@@ -1,9 +1,4 @@
-import 'package:flutter/services.dart';
-import 'package:todo/constants/index.dart';
 import 'package:todo/index.dart';
-import 'package:todo/pages/index.dart';
-import 'package:todo/providers/index.dart';
-import 'package:todo/widgets/index.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +13,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => ProjectProvider()),
+        ChangeNotifierProvider(create: (context) => SQLProjectProvider()),
       ],
       child: Builder(
         builder: (context) {

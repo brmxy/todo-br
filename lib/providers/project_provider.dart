@@ -1,5 +1,4 @@
 import 'package:todo/index.dart';
-import 'package:todo/models/index.dart';
 
 class ProjectProvider extends ChangeNotifier {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -10,7 +9,6 @@ class ProjectProvider extends ChangeNotifier {
 
   void loadPrefProjects() async {
     await prefs.then((value) {
-      // value.clear();
       if (value.containsKey('PROJECTS')) {
         _projects = value
             .getStringList('PROJECTS')!
@@ -32,10 +30,9 @@ class ProjectProvider extends ChangeNotifier {
         'PROJECTS',
         _projects.map((project) => project.toRawJson()).toList(),
       );
-      notifyListeners();
     });
 
-    print(_projects.length);
+    notifyListeners();
   }
 
   Project findProject(int id) {

@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:todo/widgets/app_bar.dart';
+import 'package:todo/index.dart';
 
 class SettingPage extends StatelessWidget {
   @override

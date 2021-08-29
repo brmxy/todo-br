@@ -1,12 +1,14 @@
-import 'dart:convert';
+import 'package:todo/models/index.dart';
 
 class Task {
   Task({
-    required this.name,
+    required this.id,
+    required this.task,
     this.isSuccess = false,
   });
 
-  final String name;
+  final int id;
+  final String task;
   final bool isSuccess;
 
   factory Task.fromRawJson(String str) => Task.fromJson(json.decode(str));
@@ -14,12 +16,14 @@ class Task {
   String toRawJson() => json.encode(toJson());
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
-        name: json["name"],
+        id: json["id"],
+        task: json["task"],
         isSuccess: json["isSuccess"],
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
+        "id": id,
+        "task": task,
         "isSuccess": isSuccess,
       };
 }
