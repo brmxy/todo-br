@@ -63,6 +63,6 @@ class MyApp extends StatelessWidget {
   }
 
   Future<bool> _loading() {
-    return Future.delayed(Duration(milliseconds: 5000)).then((value) => true);
+    return Future.delayed(Duration(milliseconds: 6000)).then((value) => true);
   }
 }

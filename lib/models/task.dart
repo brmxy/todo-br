@@ -1,4 +1,4 @@
-import 'package:todo/models/index.dart';
+import 'package:todo/models/models.dart';
 
 class Task {
   Task({
