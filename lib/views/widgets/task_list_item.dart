@@ -8,7 +8,8 @@ class TaskListItem extends StatelessWidget {
     this.text = '',
   }) : super(key: key);
 
-  final Task? task;
+  // final Task? task;
+  final SQLTask? task;
   final String? text;
 
   @override

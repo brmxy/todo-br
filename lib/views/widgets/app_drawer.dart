@@ -80,7 +80,8 @@ class CustomAppDrawer extends StatelessWidget {
 
   Widget buildMarkedProjectDrawerItem(BuildContext context) {
     double mediaWidth = MediaQuery.of(context).size.width;
-    final projectProvider = Provider.of<ProjectProvider>(context, listen: true);
+    final projectProvider =
+        Provider.of<SQLProjectProvider>(context, listen: true);
     final projects = projectProvider.projects.where(
       (project) => project.isMarked,
     );
@@ -98,7 +99,7 @@ class CustomAppDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProjectPage(project: project),
+                  builder: (context) => ProjectPage(projectId: project.id!),
                 ),
               );
             },
@@ -117,7 +118,7 @@ class CustomAppDrawer extends StatelessWidget {
                     child: Container(
                       width: 8.0,
                       height: 8.0,
-                      color: kColors[project.id % kColors.length],
+                      color: kColors[project.id! % kColors.length],
                     ),
                   ),
                   SizedBox(width: 10.0),

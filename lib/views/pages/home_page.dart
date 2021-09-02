@@ -11,11 +11,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final projectProvider = Provider.of<ProjectProvider>(
+    final projectProvider = Provider.of<SQLProjectProvider>(
       context,
       listen: false,
     );
-    projectProvider.loadPrefProjects();
+    projectProvider.getProjects();
   }
 
   @override
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildProjectMasonry(BuildContext context) {
-    final projectProvider = Provider.of<ProjectProvider>(
+    final projectProvider = Provider.of<SQLProjectProvider>(
       context,
       listen: true,
     );
@@ -109,16 +109,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildProjectCard(
-    Project project,
+    // Project project,
+    SQLProject project,
     BuildContext context,
-    List<Task> tasks,
+    List<SQLTask> tasks,
+    // List<Task> tasks,
   ) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProjectPage(project: project),
+            builder: (context) => ProjectPage(projectId: project.id!),
           ),
         );
       },
@@ -136,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       width: 10.0,
                       height: 10.0,
-                      color: kColors[project.id % kColors.length],
+                      color: kColors[project.id! % kColors.length],
                     ),
                   ),
                   SizedBox(width: 10.0),
@@ -161,7 +163,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildTaskListItem(BuildContext context, Project project) {
+  Widget buildTaskListItem(
+      BuildContext context, SQLProject project /* Project project */) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),

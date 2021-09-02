@@ -2,17 +2,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:todo/index.dart';
 
-class ProjectPage extends StatelessWidget {
-  ProjectPage({Key? key, required this.project});
+class ProjectPage extends StatefulWidget {
+  ProjectPage({Key? key, required this.projectId});
 
-  final Project project;
+  // final Project project;
+  // final SQLProject project;
+  final int projectId;
+
+  @override
+  _ProjectPageState createState() => _ProjectPageState();
+}
+
+class _ProjectPageState extends State<ProjectPage> {
+  void initProject() async {
+    final provider = context.read<SQLProjectProvider>();
+    await provider.findProject(widget.projectId);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    initProject();
+  }
 
   @override
   Widget build(BuildContext context) {
     double mediaWidth = MediaQuery.of(context).size.width;
     double mediaHeight = MediaQuery.of(context).size.height;
+
+    final project =
+        Provider.of<SQLProjectProvider>(context, listen: true).project;
     final String successTask =
-        project.tasks.where((task) => task.isSuccess).length.toString();
+        project!.tasks.where((task) => task.isSuccess).length.toString();
     final String tasks = project.tasks.length.toString();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -49,7 +71,7 @@ class ProjectPage extends StatelessWidget {
                     child: Container(
                       width: 12.0,
                       height: 12.0,
-                      color: kColors[project.id % kColors.length],
+                      color: kColors[project.id! % kColors.length],
                     ),
                   ),
                   SizedBox(width: 20.0),
@@ -126,16 +148,24 @@ class ProjectPage extends StatelessWidget {
   }
 
   Widget buildPopupMenuButton(BuildContext context) {
+    final project =
+        Provider.of<SQLProjectProvider>(context, listen: false).project;
+
     return PopupMenuButton(
       tooltip: 'Project Options',
       icon: Icon(FeatherIcons.moreVertical),
       onSelected: (value) async {
+        final projectProvider = context.read<SQLProjectProvider>();
+
         if (value == 1) {
           await ProjectBottomSheet.show(
             context,
             ProjectBtnOption.UPDATE,
-            projectId: project.id,
+            projectId: project!.id,
           );
+        } else if (value == 2) {
+          projectProvider.deleteProject(project!.id!);
+          Navigator.popUntil(context, ModalRoute.withName('/'));
         }
       },
       itemBuilder: (context) => [

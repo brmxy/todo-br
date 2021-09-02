@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => ProjectProvider()),
         ChangeNotifierProvider(create: (context) => SQLProjectProvider()),
+        ChangeNotifierProvider(create: (context) => SQLTaskProvider()),
       ],
       child: Builder(
         builder: (context) {
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
   }
 
   Future<bool> _loading() {
-    return Future.delayed(Duration(milliseconds: 6000)).then((value) => true);
+    final ProjectService service = new ProjectService();
+    return service.readAllProjects().then((value) => true);
   }
 }

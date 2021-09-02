@@ -142,19 +142,21 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
             icon: FeatherIcons.check,
             tooltip: 'Submit',
             onPressed: () {
-              final projectProvider = context.read<ProjectProvider>();
+              final projectProvider = context.read<SQLProjectProvider>();
               final ttlValue = _titleController.text;
               final descValue = _descController.text;
 
               if (ttlValue.isNotEmpty || descValue.isNotEmpty) {
-                var project = Project(
-                  id: projectProvider.projects.length + 1,
+                var project = SQLProject(
+                  id: widget.projectId!,
                   title: ttlValue,
                   description: descValue,
                 );
 
                 if (widget.option == ProjectBtnOption.ADD) {
-                  projectProvider.addNewProject(project);
+                  projectProvider.addProject(project);
+                } else if (widget.option == ProjectBtnOption.UPDATE) {
+                  projectProvider.updateProject(project);
                 }
                 Navigator.pop(context);
               }
