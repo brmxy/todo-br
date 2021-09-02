@@ -2,7 +2,6 @@ import 'package:todo/index.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 
@@ -53,7 +52,10 @@ class MyApp extends StatelessWidget {
                   },
                 );
               } else {
-                return CustomCircularProgressIndicator();
+                return Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: CustomCircularProgressIndicator(),
+                );
               }
             },
           );

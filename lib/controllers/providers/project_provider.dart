@@ -44,7 +44,11 @@ class ProjectProvider extends ChangeNotifier {
   void resetApp() async {
     await prefs.then((value) {
       value.clear();
-      notifyListeners();
     });
+
+    loadPrefProjects();
+    print(_projects.length);
+
+    notifyListeners();
   }
 }

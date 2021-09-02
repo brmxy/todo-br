@@ -15,105 +15,111 @@ class ProjectPage extends StatelessWidget {
         project.tasks.where((task) => task.isSuccess).length.toString();
     final String tasks = project.tasks.length.toString();
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        actions: [
-          IconButton(
-            tooltip: 'Mark Project',
-            icon: Icon(
-              project.isMarked
-                  ? CupertinoIcons.bookmark_fill
-                  : CupertinoIcons.bookmark,
-            ),
-            onPressed: () {},
-          ),
-          buildPopupMenuButton(context),
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      sized: false,
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(30.0),
-        width: mediaWidth,
-        height: mediaHeight,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
-                  child: Container(
-                    width: 12.0,
-                    height: 12.0,
-                    color: kColors[project.id % kColors.length],
-                  ),
-                ),
-                SizedBox(width: 20.0),
-                Expanded(
-                  child: Text(
-                    project.title,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
-                Text(
-                  "$successTask/$tasks",
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(fontSize: 18.0),
-                ),
-              ],
+      child: Scaffold(
+        appBar: CustomAppBar(
+          actions: [
+            IconButton(
+              tooltip: 'Mark Project',
+              icon: Icon(
+                project.isMarked
+                    ? CupertinoIcons.bookmark_fill
+                    : CupertinoIcons.bookmark,
+              ),
+              onPressed: () {},
             ),
-            SizedBox(height: 20.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.list_alt,
-                  color: Theme.of(context).textTheme.bodyText1!.color,
-                ),
-                SizedBox(width: 18.0),
-                Expanded(
-                  child: Text(
-                    project.description.isNotEmpty
-                        ? project.description
-                        : "This project doesn't have description.",
+            buildPopupMenuButton(context),
+          ],
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(30.0),
+          width: mediaWidth,
+          height: mediaHeight,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: Container(
+                      width: 12.0,
+                      height: 12.0,
+                      color: kColors[project.id % kColors.length],
+                    ),
+                  ),
+                  SizedBox(width: 20.0),
+                  Expanded(
+                    child: Text(
+                      project.title,
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ),
+                  Text(
+                    "$successTask/$tasks",
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1!
-                        .copyWith(fontSize: 14.0),
+                        .copyWith(fontSize: 18.0),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8.0),
-            project.tasks.length == 0
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TextFormField(
-                      autofocus: project.tasks.length == 0 ? true : false,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: Icon(
-                          FeatherIcons.plus,
-                          size: 14.0,
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                        ),
-                        hintText: 'Add Task',
-                        hintStyle: Theme.of(context).textTheme.bodyText1,
-                      ),
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.list_alt,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                  ),
+                  SizedBox(width: 18.0),
+                  Expanded(
+                    child: Text(
+                      project.description.isNotEmpty
+                          ? project.description
+                          : "This project doesn't have description.",
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(fontSize: 14.0),
                     ),
-                  )
-                : SizedBox(),
-          ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              project.tasks.length == 0
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: TextFormField(
+                        autofocus: project.tasks.length == 0 ? true : false,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: Icon(
+                            FeatherIcons.plus,
+                            size: 14.0,
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                          ),
+                          hintText: 'Add Task',
+                          hintStyle: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          ),
         ),
       ),
     );

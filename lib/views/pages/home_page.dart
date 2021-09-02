@@ -21,9 +21,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _homePageScaffoldKey = GlobalKey<ScaffoldState>();
-    SystemChrome.setEnabledSystemUIOverlays([]);
 
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      sized: false,
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
       child: Scaffold(
         key: _homePageScaffoldKey,
         appBar: CustomAppBar(
@@ -44,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildBody(BuildContext context) {
     final projectProvider = Provider.of<ProjectProvider>(
       context,
-      listen: true,
+      listen: false,
     );
 
     double mediaWidth = MediaQuery.of(context).size.width;

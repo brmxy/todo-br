@@ -31,6 +31,8 @@ class ThemeProvider extends ChangeNotifier {
         value.setString('THEME', _parsedThemeEnum);
       }
     });
+
+    notifyListeners();
   }
 
   void toggleTheme() async {
@@ -42,6 +44,9 @@ class ThemeProvider extends ChangeNotifier {
 
     _parsedThemeEnum = _currentTheme.toString().split('.').last;
     await prefs.then((value) => value.setString('THEME', _parsedThemeEnum));
+
+    setInitialTheme();
+
     notifyListeners();
   }
 }
