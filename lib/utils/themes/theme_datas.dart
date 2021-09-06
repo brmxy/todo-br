@@ -128,7 +128,7 @@ final kThemeLight = ThemeData(
   hoverColor: Colors.transparent,
   canvasColor: Color(0xFFF5F5F5),
   cardColor: Color(0xFFEDEDED),
-  buttonColor: Color(0xFF939393),
+  buttonColor: Color(0xFFABABAB),
   dividerColor: Color(0xFF6F6F6F),
   scaffoldBackgroundColor: Color(0xFFF5F5F5),
   iconTheme: IconThemeData(

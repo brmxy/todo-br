@@ -2,18 +2,20 @@ import 'package:todo/index.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => ProjectProvider()),
-        ChangeNotifierProvider(create: (context) => SQLProjectProvider()),
-        ChangeNotifierProvider(create: (context) => SQLTaskProvider()),
+        ChangeNotifierProvider(create: (context) => TaskProvider()),
       ],
       child: Builder(
         builder: (context) {
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
           return FutureBuilder(
             future: _loading(),
             builder: (context, snapshot) {
+              SystemChrome.setEnabledSystemUIOverlays([]);
+
               final themeProvider = Provider.of<ThemeProvider>(
                 context,
                 listen: true,
@@ -54,7 +58,10 @@ class MyApp extends StatelessWidget {
                 );
               } else {
                 return Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: context.watch<ThemeProvider>().currentTheme ==
+                          ActiveTheme.DARK_THEME
+                      ? Color(0xFF171717)
+                      : Color(0xFFF5F5F5),
                   child: CustomCircularProgressIndicator(),
                 );
               }
@@ -66,7 +73,6 @@ class MyApp extends StatelessWidget {
   }
 
   Future<bool> _loading() {
-    final ProjectService service = new ProjectService();
-    return service.readAllProjects().then((value) => true);
+    return Future.delayed(Duration(milliseconds: 1000)).then((value) => true);
   }
 }

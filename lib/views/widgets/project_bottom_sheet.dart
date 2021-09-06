@@ -1,5 +1,6 @@
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:todo/index.dart';
+import 'package:uuid/uuid.dart';
 
 enum ProjectBtnOption {
   ADD,
@@ -16,12 +17,12 @@ class ProjectBottomSheet extends StatefulWidget {
 
   final Key? formKey;
   final ProjectBtnOption option;
-  final int? projectId;
+  final String? projectId;
 
   static Future<void> show(
     BuildContext context,
     ProjectBtnOption option, {
-    int? projectId = 0,
+    String? projectId = '',
   }) async {
     final _formKey = GlobalKey<FormState>();
 
@@ -61,9 +62,9 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
         context,
         listen: false,
       );
-      var project = projectProvider.findProject(widget.projectId!);
-      _titleController.text = project.title;
-      _descController.text = project.description;
+      projectProvider.findProject(widget.projectId!);
+      _titleController.text = projectProvider.project!.title;
+      _descController.text = projectProvider.project!.description;
     }
   }
 
@@ -77,6 +78,8 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
   @override
   Widget build(BuildContext context) {
     double mediaHeight = MediaQuery.of(context).size.height;
+
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
     return AnimatedPadding(
       padding: MediaQuery.of(context).viewInsets,
@@ -142,22 +145,32 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
             icon: FeatherIcons.check,
             tooltip: 'Submit',
             onPressed: () {
-              final projectProvider = context.read<SQLProjectProvider>();
+              final projectProvider = context.read<ProjectProvider>();
               final ttlValue = _titleController.text;
               final descValue = _descController.text;
 
               if (ttlValue.isNotEmpty || descValue.isNotEmpty) {
-                var project = SQLProject(
-                  id: widget.projectId!,
-                  title: ttlValue,
-                  description: descValue,
-                );
-
                 if (widget.option == ProjectBtnOption.ADD) {
-                  projectProvider.addProject(project);
+                  var addProject = Project(
+                    id: Uuid().v4(),
+                    title: ttlValue,
+                    description: descValue,
+                    createdAt: DateTime.now(),
+                  );
+
+                  projectProvider.addProject(addProject);
                 } else if (widget.option == ProjectBtnOption.UPDATE) {
-                  projectProvider.updateProject(project);
+                  var updateProject = Project(
+                    id: widget.projectId!,
+                    title: ttlValue,
+                    description: descValue,
+                    isMarked: projectProvider.project!.isMarked,
+                    createdAt: projectProvider.project!.createdAt,
+                  );
+
+                  projectProvider.updateProject(updateProject);
                 }
+
                 Navigator.pop(context);
               }
             },

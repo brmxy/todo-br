@@ -2,45 +2,50 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:todo/index.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    final projectProvider = Provider.of<SQLProjectProvider>(
+class HomePage extends StatelessWidget {
+  Future<bool> _loadProjects(BuildContext context) async {
+    final projectProvider = Provider.of<ProjectProvider>(
       context,
       listen: false,
     );
-    projectProvider.getProjects();
+
+    return await projectProvider.getProjects().then((value) => true);
   }
 
   @override
   Widget build(BuildContext context) {
     final _homePageScaffoldKey = GlobalKey<ScaffoldState>();
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      sized: false,
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
-      child: Scaffold(
-        key: _homePageScaffoldKey,
-        appBar: CustomAppBar(
-          actions: [
-            IconButton(
-              tooltip: 'Search Project',
-              icon: Icon(FeatherIcons.search),
-              onPressed: () {},
+    return FutureBuilder(
+      future: _loadProjects(context),
+      builder: (context, snapshot) {
+        SystemChrome.setEnabledSystemUIOverlays([]);
+
+        if (snapshot.hasData) {
+          return Scaffold(
+            key: _homePageScaffoldKey,
+            appBar: CustomAppBar(
+              actions: [
+                IconButton(
+                  tooltip: 'Search Project',
+                  icon: Icon(FeatherIcons.search),
+                  onPressed: () {},
+                ),
+              ],
             ),
-          ],
-        ),
-        drawer: CustomAppDrawer(),
-        body: buildBody(context),
-      ),
+            drawer: CustomAppDrawer(),
+            body: buildBody(context),
+          );
+        } else {
+          return Container(
+            color: context.watch<ThemeProvider>().currentTheme ==
+                    ActiveTheme.DARK_THEME
+                ? Color(0xFF171717)
+                : Color(0xFFF5F5F5),
+            child: CustomCircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
@@ -85,7 +90,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildProjectMasonry(BuildContext context) {
-    final projectProvider = Provider.of<SQLProjectProvider>(
+    final projectProvider = Provider.of<ProjectProvider>(
       context,
       listen: true,
     );
@@ -102,25 +107,25 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, index) {
         final project = projectProvider.projects[index];
         final tasks = project.tasks;
+        final color = kColors[index % kColors.length];
 
-        return buildProjectCard(project, context, tasks);
+        return buildProjectCard(project, context, tasks, color);
       },
     );
   }
 
   Widget buildProjectCard(
-    // Project project,
-    SQLProject project,
+    Project project,
     BuildContext context,
-    List<SQLTask> tasks,
-    // List<Task> tasks,
+    List<Task> tasks,
+    Color color,
   ) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProjectPage(projectId: project.id!),
+            builder: (context) => ProjectPage(projectId: project.id),
           ),
         );
       },
@@ -138,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       width: 10.0,
                       height: 10.0,
-                      color: kColors[project.id! % kColors.length],
+                      color: color,
                     ),
                   ),
                   SizedBox(width: 10.0),
@@ -163,8 +168,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildTaskListItem(
-      BuildContext context, SQLProject project /* Project project */) {
+  Widget buildTaskListItem(BuildContext context, Project project) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),

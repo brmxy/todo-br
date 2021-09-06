@@ -7,72 +7,76 @@ class CustomAppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     double mediaWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: mediaWidth / 1.2,
-      child: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: mediaWidth,
-              margin: const EdgeInsets.only(bottom: 20.0),
-              padding: const EdgeInsets.symmetric(
-                vertical: 15.0,
-                horizontal: 20.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Menu',
-                    style: Theme.of(context).textTheme.headline2!.copyWith(
-                          color: Theme.of(context).dividerColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  InkWell(
-                    child: Icon(
-                      FeatherIcons.x,
-                      size: 24.0,
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
+    return SafeArea(
+      child: Container(
+        width: mediaWidth / 1.2,
+        child: Drawer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: mediaWidth,
+                margin: const EdgeInsets.only(bottom: 20.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 20.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Menu',
+                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                            color: Theme.of(context).dividerColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 2.0,
-                    color: Theme.of(context).dividerColor,
+                    InkWell(
+                      child: Icon(
+                        FeatherIcons.x,
+                        size: 24.0,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 2.0,
+                      color: Theme.of(context).dividerColor,
+                    ),
                   ),
                 ),
               ),
-            ),
-            DrawerItem(
-              icon: FeatherIcons.grid,
-              menuText: 'All Projects',
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            DrawerItem(
-              icon: CupertinoIcons.bookmark_fill,
-              menuText: 'Marked',
-              onTap: () {},
-            ),
-            buildMarkedProjectDrawerItem(context),
-            DrawerItem(
-              icon: FeatherIcons.settings,
-              menuText: 'Settings',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/setting');
-              },
-            ),
-            SizedBox(height: 20.0),
-          ],
+              DrawerItem(
+                icon: FeatherIcons.grid,
+                menuText: 'All Projects',
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              DrawerItem(
+                icon: CupertinoIcons.bookmark_fill,
+                menuText: 'Marked',
+                onTap: () {},
+              ),
+              buildMarkedProjectDrawerItem(context),
+              DrawerItem(
+                icon: FeatherIcons.settings,
+                menuText: 'Settings',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/setting');
+                },
+              ),
+              SizedBox(height: 20.0),
+            ],
+          ),
         ),
       ),
     );
@@ -80,17 +84,14 @@ class CustomAppDrawer extends StatelessWidget {
 
   Widget buildMarkedProjectDrawerItem(BuildContext context) {
     double mediaWidth = MediaQuery.of(context).size.width;
-    final projectProvider =
-        Provider.of<SQLProjectProvider>(context, listen: true);
-    final projects = projectProvider.projects.where(
-      (project) => project.isMarked,
-    );
+    final projectProvider = Provider.of<ProjectProvider>(context, listen: true);
+    final projects = projectProvider.markedProjects;
 
     return Expanded(
       child: ListView.builder(
         itemCount: projects.length,
         itemBuilder: (context, index) {
-          final project = projectProvider.projects[index];
+          final project = projectProvider.markedProjects[index];
           final tasks = project.tasks;
 
           return InkWell(
@@ -99,7 +100,9 @@ class CustomAppDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProjectPage(projectId: project.id!),
+                  builder: (context) => ProjectPage(
+                    projectId: project.id,
+                  ),
                 ),
               );
             },
@@ -118,7 +121,7 @@ class CustomAppDrawer extends StatelessWidget {
                     child: Container(
                       width: 8.0,
                       height: 8.0,
-                      color: kColors[project.id! % kColors.length],
+                      color: kColors[index % kColors.length],
                     ),
                   ),
                   SizedBox(width: 10.0),

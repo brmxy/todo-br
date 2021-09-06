@@ -3,13 +3,15 @@ import 'package:todo/models/models.dart';
 class Task {
   Task({
     required this.id,
+    required this.projectId,
     required this.task,
-    this.isSuccess = false,
+    this.isDone = false,
   });
 
-  final int id;
+  final String id;
+  final int projectId;
   final String task;
-  final bool isSuccess;
+  final bool isDone;
 
   factory Task.fromRawJson(String str) => Task.fromJson(json.decode(str));
 
@@ -17,13 +19,15 @@ class Task {
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
         id: json["id"],
+        projectId: json["projectId"],
         task: json["task"],
-        isSuccess: json["isSuccess"],
+        isDone: json["isDone"] == 1 ? true : false,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "projectId": projectId,
         "task": task,
-        "isSuccess": isSuccess,
+        "isDone": isDone ? 1 : 0,
       };
 }

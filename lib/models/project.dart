@@ -7,13 +7,15 @@ class Project {
     this.description = '',
     this.isMarked = false,
     this.tasks = const <Task>[],
+    required this.createdAt,
   });
 
-  final int id;
+  final String id;
   final String title;
   final String description;
   final bool isMarked;
-  final List<Task> tasks;
+  List<Task> tasks;
+  final DateTime createdAt;
 
   factory Project.fromRawJson(String str) => Project.fromJson(json.decode(str));
 
@@ -23,15 +25,15 @@ class Project {
         id: json["id"],
         title: json["title"],
         description: json["description"],
-        isMarked: json["isMarked"],
-        tasks: List<Task>.from(json["tasks"].map((x) => x)),
+        isMarked: json["isMarked"] == 1 ? true : false,
+        createdAt: DateTime.parse(json["createdAt"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "description": description,
-        "isMarked": isMarked,
-        "tasks": List<Task>.from(tasks.map((x) => x)),
+        "isMarked": isMarked ? 1 : 0,
+        "createdAt": createdAt.toIso8601String(),
       };
 }

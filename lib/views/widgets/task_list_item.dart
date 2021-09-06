@@ -8,8 +8,7 @@ class TaskListItem extends StatelessWidget {
     this.text = '',
   }) : super(key: key);
 
-  // final Task? task;
-  final SQLTask? task;
+  final Task? task;
   final String? text;
 
   @override
@@ -21,7 +20,7 @@ class TaskListItem extends StatelessWidget {
           Icon(
             text!.isNotEmpty
                 ? FeatherIcons.circle
-                : task!.isSuccess
+                : task!.isDone
                     ? FeatherIcons.checkCircle
                     : FeatherIcons.circle,
             size: 10,

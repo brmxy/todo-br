@@ -5,3 +5,5 @@ export 'package:todo/views/widgets/drawer_item.dart';
 export 'package:todo/views/widgets/floating_action_icon_button.dart';
 export 'package:todo/views/widgets/project_bottom_sheet.dart';
 export 'package:todo/views/widgets/task_list_item.dart';
+export 'package:todo/views/widgets/setting_item.dart';
+export 'package:todo/views/widgets/alert_dialog.dart';

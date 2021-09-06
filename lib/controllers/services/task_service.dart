@@ -4,18 +4,31 @@ import 'package:todo/models/models.dart';
 class TaskService {
   DatabaseService get instance => DatabaseService.instance;
 
-  Future<List<SQLTask>> readAllTasks(int projectId) async {
+  Future<List<Task>> readAllTasks(String projectId) async {
     final db = await instance.db;
-    final res = await db.query('tb_task', where: 'projectId = $projectId');
+    final res = await db.query('tb_task',
+        where: 'projectId = $projectId', orderBy: 'createdAt ASC');
 
     if (res.isNotEmpty) {
-      final List<SQLTask> tasks = res.map<SQLTask>((task) {
-        return SQLTask.fromJson(task);
+      final List<Task> tasks = res.map<Task>((task) {
+        return Task.fromJson(task);
       }).toList();
 
       return tasks;
     } else {
       return [];
     }
+  }
+
+  Future<bool> deleteAllTasks() async {
+    var isSuccess;
+
+    final db = await instance.db;
+    await db
+        .delete('tb_task')
+        .then((value) => isSuccess = true)
+        .catchError((err) => isSuccess = false);
+
+    return isSuccess;
   }
 }

@@ -1,54 +1,89 @@
 import 'package:todo/index.dart';
 
 class ProjectProvider extends ChangeNotifier {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  Future<SharedPreferences> get prefs async => await _prefs;
-
-  List<Project> _projects = <Project>[];
+  List<Project> _projects = [];
   List<Project> get projects => _projects;
 
-  void loadPrefProjects() async {
-    await prefs.then((value) {
-      if (value.containsKey('PROJECTS')) {
-        _projects = value
-            .getStringList('PROJECTS')!
-            .map((project) => Project.fromRawJson(project))
-            .toList();
-      } else {
-        _projects = <Project>[];
+  List<Project> _markedProjects = [];
+  List<Project> get markedProjects => _markedProjects;
+
+  Project? project;
+
+  ProjectService service = new ProjectService();
+  TaskService taskService = new TaskService();
+
+  Future<void> getProjects() async {
+    _projects = await service.readAllProjects();
+    _projects.map((project) async {
+      project.tasks = await taskService.readAllTasks(project.id);
+    });
+
+    notifyListeners();
+  }
+
+  void getMarkedProjects() async {
+    _markedProjects = await service.readMarkedProject();
+
+    notifyListeners();
+  }
+
+  Future<void> findProject(String projectId) async {
+    final _project = await service.readOneProject(projectId);
+    project = _project;
+
+    notifyListeners();
+  }
+
+  void addProject(Project project) async {
+    final bool isSuccess = await service.createProject(project);
+
+    if (isSuccess) getProjects();
+  }
+
+  void updateProject(Project project) async {
+    final bool isSuccess = await service.updateProject(project);
+
+    if (isSuccess) {
+      await findProject(project.id);
+      getProjects();
+      getMarkedProjects();
+    }
+  }
+
+  void toggleMarkProject(String projectId) async {
+    if (!project!.isMarked) {
+      bool isMarkSuccess = await service.markProject(projectId);
+
+      if (isMarkSuccess) {
+        await findProject(projectId);
+        getProjects();
+        getMarkedProjects();
       }
-    });
-
-    notifyListeners();
+    } else {
+      bool isUnmarkSuccess = await service.unmarkProject(projectId);
+      if (isUnmarkSuccess) {
+        await findProject(projectId);
+        getProjects();
+        getMarkedProjects();
+      }
+    }
   }
 
-  void addNewProject(Project project) async {
-    _projects.insert(0, project);
+  void resetProject() async {
+    final bool isSuccess = await service.deleteAllProjects();
 
-    await prefs.then((value) {
-      value.setStringList(
-        'PROJECTS',
-        _projects.map((project) => project.toRawJson()).toList(),
-      );
-    });
-
-    notifyListeners();
+    if (isSuccess) {
+      getProjects();
+      getMarkedProjects();
+    }
   }
 
-  Project findProject(int id) {
-    Project project = _projects.firstWhere((project) => project.id == id);
+  void deleteProject(String projectId) async {
+    final bool isSuccess = await service.deleteOneProject(projectId);
 
-    return project;
-  }
-
-  void resetApp() async {
-    await prefs.then((value) {
-      value.clear();
-    });
-
-    loadPrefProjects();
-    print(_projects.length);
-
-    notifyListeners();
+    if (isSuccess) {
+      getProjects();
+      getMarkedProjects();
+    }
   }
 }

@@ -49,4 +49,15 @@ class ThemeProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void resetTheme() async {
+    await prefs.then((value) {
+      if (value.containsKey('THEME')) {
+        value.clear();
+        setInitialTheme();
+      }
+    });
+
+    notifyListeners();
+  }
 }

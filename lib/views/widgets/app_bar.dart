@@ -21,6 +21,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
       iconTheme: Theme.of(context).iconTheme.copyWith(size: 16.0),
       actionsIconTheme: Theme.of(context).iconTheme,
       actions: widget.actions,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
       elevation: 0,
       bottom: PreferredSize(
         child: Container(

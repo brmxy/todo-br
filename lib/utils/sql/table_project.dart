@@ -1,9 +1,10 @@
 const String kTableProject = '''
 CREATE TABLE tb_project (
-	id INT AUTO_INCREMENT,
+	id VARCHAR(255) NOT NULL,
 	title VARCHAR(255) NOT NULL,
-	description TEXT(255),
-	isMarked BOOLEAN NOT NULL DEFAULT 0
+	description TEXT,
+	isMarked BOOLEAN NOT NULL DEFAULT 0,
+  createdAt DATETIME NOT NULL,
   PRIMARY KEY (id)
 )
 ''';
