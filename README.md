@@ -9,7 +9,7 @@ Managing your todos with project based todo task.
 - SQLite Database
 - Shared Preference
 
-Check [here]() for more informations about dependencies I used.
+Check [here](https://github.com/yarabramasta/todo-br/blob/master/pubspec.yaml) for more informations about dependencies I used.
 
 ## Current Features (app version: 0.5.1-alpha)
 
@@ -19,4 +19,4 @@ Check [here]() for more informations about dependencies I used.
 - Reset Application
 
 ## Source
-Check the released app at [here]()
+Check current release apk at [here](https://github.com/yarabramasta/todo-br/releases/tag/v0.5.1-alpha)
