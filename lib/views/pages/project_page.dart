@@ -156,8 +156,26 @@ class _ProjectPageState extends State<ProjectPage> {
             projectId: project!.id,
           );
         } else if (value == 2) {
-          projectProvider.deleteProject(project!.id);
-          Navigator.pop(context);
+          await CustomAlertDialog.show(
+            context,
+            "Delete Project",
+            "Do you want to reset these project?",
+            [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("No"),
+              ),
+              TextButton(
+                onPressed: () {
+                  projectProvider.deleteProject(project!.id);
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                child: Text("Yes"),
+              ),
+            ],
+          );
         }
       },
       itemBuilder: (context) => [

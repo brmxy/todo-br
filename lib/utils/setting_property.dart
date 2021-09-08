@@ -20,13 +20,13 @@ void _showAlertDialog(BuildContext context) async {
   await CustomAlertDialog.show(
     context,
     "Reset Application",
-    "This will reset all your projects and tasks that you have done before.",
+    "Do you really want to reset the application? This process will close the application and cannot be undone.",
     [
       TextButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        child: Text("Cancel"),
+        child: Text("No"),
       ),
       TextButton(
         onPressed: () {
@@ -35,7 +35,7 @@ void _showAlertDialog(BuildContext context) async {
           context.read<ThemeProvider>().resetTheme();
           SystemNavigator.pop();
         },
-        child: Text("Confirm"),
+        child: Text("Yes"),
       ),
     ],
   );
@@ -65,7 +65,7 @@ List<_SettingItem> getSettingItems(BuildContext context) {
         showAboutDialog(
           context: context,
           applicationName: "Todo Br",
-          applicationVersion: "v1.0.0",
+          applicationVersion: "v0.5.1-alpha",
           applicationLegalese: "Copyright(c) 2021 Yara Bramasta",
           applicationIcon: Image.asset(
             "icons/ic_launcher.png",
@@ -106,7 +106,7 @@ List<_SettingItem> getSettingItems(BuildContext context) {
                 height: 40.0,
               ),
               applicationName: "Todo Br",
-              applicationVersion: "v1.0.0",
+              applicationVersion: "v0.5.1-alpha",
               applicationLegalese: _license,
             ),
           ),
