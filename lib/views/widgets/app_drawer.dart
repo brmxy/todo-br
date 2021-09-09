@@ -2,7 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:todo/index.dart';
 
-class CustomAppDrawer extends StatelessWidget {
+class CustomAppDrawer extends StatefulWidget {
+  @override
+  _CustomAppDrawerState createState() => _CustomAppDrawerState();
+}
+
+class _CustomAppDrawerState extends State<CustomAppDrawer> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProjectProvider>().getMarkedProjects();
+  }
+
   @override
   Widget build(BuildContext context) {
     double mediaWidth = MediaQuery.of(context).size.width;

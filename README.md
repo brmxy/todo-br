@@ -11,12 +11,13 @@ Managing your todos with project based todo task.
 
 Check [here](https://github.com/yarabramasta/todo-br/blob/master/pubspec.yaml) for more informations about dependencies I used.
 
-## Current Features (app version: 0.5.1-alpha)
+## Current Features (app version: 0.6.0-alpha)
 
 - Change Theme (Default is Dark)
 - Home, Project, Setting, and License Page
 - Create, Update, and Delete project
+- Create Task, Complete & Uncomplete Tasks, Delete All Tasks
 - Reset Application
 
 ## Source
-Check current release apk at [here](https://github.com/yarabramasta/todo-br/releases/tag/v0.5.1-alpha)
+Check current release apk at [here](https://github.com/yarabramasta/todo-br/releases/tag/v0.6.0-alpha)

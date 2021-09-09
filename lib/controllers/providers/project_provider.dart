@@ -14,15 +14,35 @@ class ProjectProvider extends ChangeNotifier {
 
   Future<void> getProjects() async {
     _projects = await service.readAllProjects();
-    _projects.map((project) async {
-      project.tasks = await taskService.readAllTasks(project.id);
+    projects.forEach((project) async {
+      await initTasks(project);
     });
+
+    notifyListeners();
+  }
+
+  Future<void> initTasks(Project project) async {
+    final tasks = await taskService.readAllTasks(project.id);
+
+    if (tasks.length > 0) {
+      project.tasks = tasks;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> updateTasks(String projectId) async {
+    project!.tasks = await taskService.readAllTasks(projectId);
 
     notifyListeners();
   }
 
   void getMarkedProjects() async {
     _markedProjects = await service.readMarkedProject();
+
+    _markedProjects.forEach((project) async {
+      await initTasks(project);
+    });
 
     notifyListeners();
   }
@@ -31,13 +51,19 @@ class ProjectProvider extends ChangeNotifier {
     final _project = await service.readOneProject(projectId);
     project = _project;
 
+    await updateTasks(projectId);
+    getProjects();
+
     notifyListeners();
   }
 
   void addProject(Project project) async {
     final bool isSuccess = await service.createProject(project);
 
-    if (isSuccess) getProjects();
+    if (isSuccess) {
+      getProjects();
+      await updateTasks(project.id);
+    }
   }
 
   void updateProject(Project project) async {
@@ -45,6 +71,7 @@ class ProjectProvider extends ChangeNotifier {
 
     if (isSuccess) {
       await findProject(project.id);
+      await updateTasks(project.id);
       getProjects();
       getMarkedProjects();
     }
@@ -56,6 +83,7 @@ class ProjectProvider extends ChangeNotifier {
 
       if (isMarkSuccess) {
         await findProject(projectId);
+        await updateTasks(projectId);
         getProjects();
         getMarkedProjects();
       }
@@ -63,6 +91,7 @@ class ProjectProvider extends ChangeNotifier {
       bool isUnmarkSuccess = await service.unmarkProject(projectId);
       if (isUnmarkSuccess) {
         await findProject(projectId);
+        await updateTasks(projectId);
         getProjects();
         getMarkedProjects();
       }
@@ -82,6 +111,7 @@ class ProjectProvider extends ChangeNotifier {
     final bool isSuccess = await service.deleteOneProject(projectId);
 
     if (isSuccess) {
+      await updateTasks(projectId);
       getProjects();
       getMarkedProjects();
     }

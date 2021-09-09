@@ -9,7 +9,7 @@ class Task {
   });
 
   final String id;
-  final int projectId;
+  final String projectId;
   final String task;
   final bool isDone;
 

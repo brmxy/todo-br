@@ -2,14 +2,33 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:todo/index.dart';
 
-class HomePage extends StatelessWidget {
-  Future<bool> _loadProjects(BuildContext context) async {
-    final projectProvider = Provider.of<ProjectProvider>(
-      context,
-      listen: false,
-    );
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-    return await projectProvider.getProjects().then((value) => true);
+class _HomePageState extends State<HomePage> {
+  Future<bool> _loadProjects() async {
+    return await context
+        .read<ProjectProvider>()
+        .getProjects()
+        .then((value) => true);
+  }
+
+  void _load() async {
+    await context.read<ProjectProvider>().getProjects();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _load();
   }
 
   @override
@@ -17,7 +36,7 @@ class HomePage extends StatelessWidget {
     final _homePageScaffoldKey = GlobalKey<ScaffoldState>();
 
     return FutureBuilder(
-      future: _loadProjects(context),
+      future: _loadProjects(),
       builder: (context, snapshot) {
         SystemChrome.setEnabledSystemUIOverlays([]);
 
@@ -106,10 +125,9 @@ class HomePage extends StatelessWidget {
       itemCount: projectProvider.projects.length,
       itemBuilder: (context, index) {
         final project = projectProvider.projects[index];
-        final tasks = project.tasks;
         final color = kColors[index % kColors.length];
 
-        return buildProjectCard(project, context, tasks, color);
+        return buildProjectCard(project, context, color);
       },
     );
   }
@@ -117,7 +135,6 @@ class HomePage extends StatelessWidget {
   Widget buildProjectCard(
     Project project,
     BuildContext context,
-    List<Task> tasks,
     Color color,
   ) {
     return InkWell(
@@ -127,7 +144,7 @@ class HomePage extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ProjectPage(projectId: project.id),
           ),
-        );
+        ).then((value) => setState(() {}));
       },
       child: Card(
         child: Container(
@@ -158,7 +175,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10.0),
-              tasks.isNotEmpty
+              project.tasks.isNotEmpty
                   ? buildTaskListItem(context, project)
                   : TaskListItem(text: 'There is no task in this project'),
             ],

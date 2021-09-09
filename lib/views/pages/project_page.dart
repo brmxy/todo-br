@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:todo/index.dart';
+import 'package:uuid/uuid.dart';
 
 class ProjectPage extends StatefulWidget {
   ProjectPage({Key? key, required this.projectId});
@@ -12,6 +13,8 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
+  final TextEditingController _addTaskCtrl = TextEditingController();
+
   void _initProject() async {
     final provider = context.read<ProjectProvider>();
     await provider.findProject(widget.projectId);
@@ -110,29 +113,42 @@ class _ProjectPageState extends State<ProjectPage> {
               ],
             ),
             SizedBox(height: 8.0),
-            project.tasks.length == 0
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TextFormField(
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: Icon(
-                          FeatherIcons.plus,
-                          size: 14.0,
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                        ),
-                        hintText: 'Add Task',
-                        hintStyle: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                  )
-                : SizedBox(),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: TextFormField(
+                style: Theme.of(context).textTheme.bodyText1,
+                controller: _addTaskCtrl,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                  prefixIcon: Icon(
+                    FeatherIcons.plus,
+                    size: 14.0,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                  ),
+                  hintText: 'Add Task',
+                  hintStyle: Theme.of(context).textTheme.bodyText1,
+                ),
+                onFieldSubmitted: (value) async {
+                  final projectProvider = context.read<ProjectProvider>();
+                  final taskProvider = context.read<TaskProvider>();
+
+                  final task = Task(
+                    id: Uuid().v4(),
+                    task: value,
+                    projectId: project.id,
+                  );
+
+                  taskProvider.addTask(project.id, task);
+                  await projectProvider.updateTasks(project.id);
+                  _addTaskCtrl.clear();
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -140,14 +156,17 @@ class _ProjectPageState extends State<ProjectPage> {
   }
 
   Widget buildPopupMenuButton(BuildContext context) {
-    final project =
-        Provider.of<ProjectProvider>(context, listen: false).project;
+    final project = Provider.of<ProjectProvider>(
+      context,
+      listen: true,
+    ).project;
 
     return PopupMenuButton(
       tooltip: 'Project Options',
       icon: Icon(FeatherIcons.moreVertical),
       onSelected: (value) async {
         final projectProvider = context.read<ProjectProvider>();
+        final taskProvider = context.read<TaskProvider>();
 
         if (value == 1) {
           await ProjectBottomSheet.show(
@@ -155,11 +174,12 @@ class _ProjectPageState extends State<ProjectPage> {
             ProjectBtnOption.UPDATE,
             projectId: project!.id,
           );
+          await projectProvider.updateTasks(project.id);
         } else if (value == 2) {
           await CustomAlertDialog.show(
             context,
             "Delete Project",
-            "Do you want to reset these project?",
+            "Do you want to delete these project?",
             [
               TextButton(
                 onPressed: () {
@@ -168,9 +188,47 @@ class _ProjectPageState extends State<ProjectPage> {
                 child: Text("No"),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   projectProvider.deleteProject(project!.id);
+                  taskProvider.resetTaskByProjectId(project.id);
+                  await projectProvider.updateTasks(project.id);
                   Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                child: Text("Yes"),
+              ),
+            ],
+          );
+        } else if (value == 3) {
+          taskProvider.updateTaskStatus(
+            TaskStatus.UNDONE,
+            isAll: true,
+            projectId: project!.id,
+          );
+          await projectProvider.updateTasks(project.id);
+        } else if (value == 4) {
+          taskProvider.updateTaskStatus(
+            TaskStatus.DONE,
+            isAll: true,
+            projectId: project!.id,
+          );
+          await projectProvider.updateTasks(project.id);
+        } else if (value == 5) {
+          await CustomAlertDialog.show(
+            context,
+            "Delete Project",
+            "Do you want to delete all your tasks?",
+            [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("No"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  taskProvider.resetTaskByProjectId(project!.id);
+                  await projectProvider.updateTasks(project.id);
+                  Navigator.pop(context);
                 },
                 child: Text("Yes"),
               ),

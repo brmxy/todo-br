@@ -6,7 +6,7 @@ class Project {
     required this.title,
     this.description = '',
     this.isMarked = false,
-    this.tasks = const <Task>[],
+    this.tasks = const [],
     required this.createdAt,
   });
 

@@ -33,7 +33,8 @@ void _showAlertDialog(BuildContext context) async {
           context.read<ProjectProvider>().resetProject();
           context.read<TaskProvider>().resetTask();
           context.read<ThemeProvider>().resetTheme();
-          SystemNavigator.pop();
+          Navigator.pop(context);
+          // SystemNavigator.pop();
         },
         child: Text("Yes"),
       ),
@@ -65,7 +66,7 @@ List<_SettingItem> getSettingItems(BuildContext context) {
         showAboutDialog(
           context: context,
           applicationName: "Todo Br",
-          applicationVersion: "v0.5.1-alpha",
+          applicationVersion: "v0.6.0-alpha",
           applicationLegalese: "Copyright(c) 2021 Yara Bramasta",
           applicationIcon: Image.asset(
             "icons/ic_launcher.png",
@@ -106,7 +107,7 @@ List<_SettingItem> getSettingItems(BuildContext context) {
                 height: 40.0,
               ),
               applicationName: "Todo Br",
-              applicationVersion: "v0.5.1-alpha",
+              applicationVersion: "v0.6.0-alpha",
               applicationLegalese: _license,
             ),
           ),
