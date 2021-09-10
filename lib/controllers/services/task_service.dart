@@ -76,7 +76,9 @@ class TaskService {
     await db
         .update(
           'tb_task',
-          {'isDone': status == TaskStatus.DONE ? 1 : 0},
+          {
+            'isDone': status == TaskStatus.DONE ? 1 : 0,
+          },
           where: isAll ? 'projectId = ?' : 'id = ?',
           whereArgs: [isAll ? projectId : taskId],
         )

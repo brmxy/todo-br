@@ -43,15 +43,7 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.hasData) {
           return Scaffold(
             key: _homePageScaffoldKey,
-            appBar: CustomAppBar(
-              actions: [
-                IconButton(
-                  tooltip: 'Search Project',
-                  icon: Icon(FeatherIcons.search),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+            appBar: CustomAppBar(),
             drawer: CustomAppDrawer(),
             body: buildBody(context),
           );

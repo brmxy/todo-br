@@ -39,6 +39,9 @@ class _ProjectPageState extends State<ProjectPage> {
         project!.tasks.where((task) => task.isDone).length.toString();
     final String tasks = project.tasks.length.toString();
 
+    final int _tasksLength =
+        context.watch<ProjectProvider>().project!.tasks.length;
+
     return Scaffold(
       appBar: CustomAppBar(
         actions: [
@@ -62,7 +65,8 @@ class _ProjectPageState extends State<ProjectPage> {
         padding: const EdgeInsets.all(30.0),
         width: mediaWidth,
         height: mediaHeight,
-        child: Column(
+        child: ListView(
+          primary: false,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,10 +117,20 @@ class _ProjectPageState extends State<ProjectPage> {
               ],
             ),
             SizedBox(height: 8.0),
+            _tasksLength > 0
+                ? Column(
+                    children: project.tasks
+                        .map((task) => TaskItemInput(task: task))
+                        .toList(),
+                  )
+                : SizedBox(),
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: TextFormField(
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontSize: 16.0),
                 controller: _addTaskCtrl,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -127,7 +141,7 @@ class _ProjectPageState extends State<ProjectPage> {
                   ),
                   prefixIcon: Icon(
                     FeatherIcons.plus,
-                    size: 14.0,
+                    size: 16.0,
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                   hintText: 'Add Task',

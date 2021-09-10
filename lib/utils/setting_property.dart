@@ -20,7 +20,7 @@ void _showAlertDialog(BuildContext context) async {
   await CustomAlertDialog.show(
     context,
     "Reset Application",
-    "Do you really want to reset the application? This process will close the application and cannot be undone.",
+    "Do you really want to reset the application?\nThis process will close the application and cannot be undone.",
     [
       TextButton(
         onPressed: () {
@@ -66,7 +66,7 @@ List<_SettingItem> getSettingItems(BuildContext context) {
         showAboutDialog(
           context: context,
           applicationName: "Todo Br",
-          applicationVersion: "v0.6.0-alpha",
+          applicationVersion: "v1.0.0",
           applicationLegalese: "Copyright(c) 2021 Yara Bramasta",
           applicationIcon: Image.asset(
             "icons/ic_launcher.png",
@@ -107,7 +107,7 @@ List<_SettingItem> getSettingItems(BuildContext context) {
                 height: 40.0,
               ),
               applicationName: "Todo Br",
-              applicationVersion: "v0.6.0-alpha",
+              applicationVersion: "v1.0.0",
               applicationLegalese: _license,
             ),
           ),

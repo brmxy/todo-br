@@ -34,6 +34,10 @@ class TaskProvider extends ChangeNotifier {
     );
   }
 
+  void deleteTask(String taskId) async {
+    await service.deleteOneTask(taskId);
+  }
+
   void resetTaskByProjectId(String projectId) async {
     await service.deleteTasksByProjectId(projectId);
   }
