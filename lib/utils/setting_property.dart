@@ -20,7 +20,7 @@ void _showAlertDialog(BuildContext context) async {
   await CustomAlertDialog.show(
     context,
     "Reset Application",
-    "Do you really want to reset the application?\nThis process will close the application and cannot be undone.",
+    "Do you really want to reset the application?\n\nThis process will close the application and cannot be undone.",
     [
       TextButton(
         onPressed: () {
@@ -33,8 +33,7 @@ void _showAlertDialog(BuildContext context) async {
           context.read<ProjectProvider>().resetProject();
           context.read<TaskProvider>().resetTask();
           context.read<ThemeProvider>().resetTheme();
-          Navigator.pop(context);
-          // SystemNavigator.pop();
+          SystemNavigator.pop();
         },
         child: Text("Yes"),
       ),
